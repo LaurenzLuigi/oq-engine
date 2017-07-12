@@ -332,10 +332,14 @@ class Catalogue(object):
                                                  bootstrap=bootstrap)
         # If the histogram does not sum to 1.0 then remove the difference
         # from the lowest bin
+        depth_hist = np.around(depth_hist, 3)      
+        if np.sum(depth_hist) > 1.0:
+            while np.sum(depth_hist) > 1.0:
+                depth_hist[-1] -= (np.sum(depth_hist) - 1.0)             
+        if np.sum(depth_hist) < 1.0:
+            while np.sum(depth_hist) < 1.0:
+                depth_hist[-1] += (1.0 - np.sum(depth_hist))       
         depth_hist = np.around(depth_hist, 3)
-        while np.sum(depth_hist) > 1.0:
-            depth_hist[-1] -= (np.sum(depth_hist) - 1.0)
-            depth_hist = np.around(depth_hist, 3)
 
         pmf_list = []
         for iloc, prob in enumerate(depth_hist):
